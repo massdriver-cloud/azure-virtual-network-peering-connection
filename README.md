@@ -54,7 +54,7 @@ Form input parameters for configuring a bundle for deployment.
 ## Properties
 
 - **`accepter_vnet_id`** *(string)*: **IMPORTANT: Only set this value if you haven't connected a remote "accepter" VNet to the bundle**.
- If an accepter VNet is connected, this field is ignored and the value will be extracted from the connection. Use this field if the remote VNet isn't managed by Massdriver or exists in a different subscription than the requester VNet. The CIDRs of the requester and accepter VNets **must not overlap**.
+ If an accepter VNet is connected, this field is ignored and the value will be extracted from the connection. Use this field if the remote VNet isn't managed by Massdriver or exists in a different subscription than the requester VNet. The CIDRs of the requester and accepter VNets **must not overlap**. **This will require you to resync the peering connection of the accepter VNet manually (instructions in bundle Guide)**!
 
   Examples:
   ```json

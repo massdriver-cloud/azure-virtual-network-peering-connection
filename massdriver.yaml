@@ -10,7 +10,7 @@ params:
     accepter_vnet_id:
       type: string
       title: Remote VNet Resource ID
-      description: "**IMPORTANT: Only set this value if you haven't connected a remote \"accepter\" VNet to the bundle**.\n If an accepter VNet is connected, this field is ignored and the value will be extracted from the connection. Use this field if the remote VNet isn't managed by Massdriver or exists in a different subscription than the requester VNet. The CIDRs of the requester and accepter VNets **must not overlap**."
+      description: "**IMPORTANT: Only set this value if you haven't connected a remote \"accepter\" VNet to the bundle**.\n If an accepter VNet is connected, this field is ignored and the value will be extracted from the connection. Use this field if the remote VNet isn't managed by Massdriver or exists in a different subscription than the requester VNet. The CIDRs of the requester and accepter VNets **must not overlap**. **This will require you to resync the peering connection of the accepter VNet manually (instructions in bundle Guide)**!"
       $md.immutable: true
       $ref: https://raw.githubusercontent.com/massdriver-cloud/artifact-definitions/main/definitions/types/azure-resource-id.json
 
