@@ -16,13 +16,13 @@ data "azurerm_virtual_network" "requester" {
 }
 
 data "azurerm_virtual_network" "md-accepter" {
-  count               = local.create_accepter ? 1 : 0
+  count               = local.create_accepter ? 0 : 1
   name                = local.accepter_vnet_name
   resource_group_name = local.accepter_vnet_rg
 }
 
 data "azurerm_virtual_network" "external-accepter" {
-  count               = local.create_accepter ? 0 : 1
+  count               = local.create_accepter ? 1 : 0
   name                = element(split("/", var.accepter_vnet_id), index(split("/", var.accepter_vnet_id), "virtualNetworks") + 1)
   resource_group_name = element(split("/", var.accepter_vnet_id), index(split("/", var.accepter_vnet_id), "resourceGroups") + 1)
 }
@@ -44,7 +44,7 @@ resource "azurerm_virtual_network_peering" "requester" {
 }
 
 resource "azurerm_virtual_network_peering" "accepter" {
-  count                        = local.create_accepter ? 1 : 0
+  count                        = local.create_accepter ? 0 : 1
   name                         = "${local.accepter_vnet_name}-peering"
   resource_group_name          = local.accepter_vnet_rg
   virtual_network_name         = local.accepter_vnet_name
