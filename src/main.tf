@@ -1,5 +1,5 @@
 locals {
-  create_accepter = var.accepter_vnet_id != null ? true : false
+  create_accepter = var.accepter != null ? true : false
 
   requester_vnet_id   = var.requester.data.infrastructure.id
   requester_vnet_name = element(split("/", local.requester_vnet_id), index(split("/", local.requester_vnet_id), "virtualNetworks") + 1)
@@ -15,16 +15,9 @@ data "azurerm_virtual_network" "requester" {
   resource_group_name = local.requester_vnet_rg
 }
 
-data "azurerm_virtual_network" "md-accepter" {
-  count               = local.create_accepter ? 0 : 1
+data "azurerm_virtual_network" "accepter" {
   name                = local.accepter_vnet_name
   resource_group_name = local.accepter_vnet_rg
-}
-
-data "azurerm_virtual_network" "external-accepter" {
-  count               = local.create_accepter ? 1 : 0
-  name                = element(split("/", var.accepter_vnet_id), index(split("/", var.accepter_vnet_id), "virtualNetworks") + 1)
-  resource_group_name = element(split("/", var.accepter_vnet_id), index(split("/", var.accepter_vnet_id), "resourceGroups") + 1)
 }
 
 resource "azurerm_virtual_network_peering" "requester" {
@@ -39,12 +32,12 @@ resource "azurerm_virtual_network_peering" "requester" {
   allow_gateway_transit = false
 
   triggers = {
-    remote_address_space = join(",", try(data.azurerm_virtual_network.md-accepter.0.address_space, data.azurerm_virtual_network.external-accepter.0.address_space))
+    remote_address_space = join(",", data.azurerm_virtual_network.accepter.address_space)
   }
 }
 
 resource "azurerm_virtual_network_peering" "accepter" {
-  count                        = local.create_accepter ? 0 : 1
+  count                        = local.create_accepter ? 1 : 0
   name                         = "${local.accepter_vnet_name}-peering"
   resource_group_name          = local.accepter_vnet_rg
   virtual_network_name         = local.accepter_vnet_name
