@@ -1,5 +1,5 @@
 locals {
-  create_accepter = var.accepter != null ? true : false
+  create_accepter = var.accepter != null
 
   requester_vnet_id   = var.requester.data.infrastructure.id
   requester_vnet_name = element(split("/", local.requester_vnet_id), index(split("/", local.requester_vnet_id), "virtualNetworks") + 1)
