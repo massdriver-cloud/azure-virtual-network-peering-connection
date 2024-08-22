@@ -8,6 +8,36 @@ Azure Virtual Network (VNet) peering seamlessly connects two Azure virtual netwo
 2. **Traffic Allowances**: The peering connections are configured to allow virtual network access and forwarded traffic while disabling gateway transit to ensure compliance with Global Peering restrictions.
 3. **Triggers for Address Space Changes**: The module includes triggers that react to changes in the remote network's address space to ensure the peering connection remains up to date.
 
+This bundle is tailored for two scenarios:
+1. Peering two Virtual Networks, both of which are provisioned by Massdriver and in the same Azure subscription.
+2. Peering two Virtual Networks, only one of which is provisioned and managed by Massdriver.
+
+#### Both Virtual Networks in the Same Subscription Provisioned by Massdriver
+In this case, both Virtual Networks are managed by Massdriver and are in the same Azure subscription. Users should connect both Virtual Networks to the bundle (one to `accepter` and the other to `requester`). It doesn't matter which network is the accepter or requester; they are functionally equivalent. The bundle will handle all the necessary configurations, including establishing the peering connection and syncing the connection.
+
+#### Virtual Networks in Separate Subscriptions, or Only One Managed by Massdriver
+In this case, the bundle will use the `requester` connection only. You'll need to specify additional field for "Remote Virtual Network ID" to initiate the peering correctly. No additional manual steps will be necessary in the Azure portal to complete the peering process.
+
+**Steps to Manually Accept Peering Connection**:
+1. Log into the Azure portal for the `accepter` subscription.
+2. Navigate to the Virtual Network Overview page.
+3. Choose `JSON View` in the top right corner.
+4. Copy the `id` value near the top (without quotes). For example: `/subscriptions/123456-1234-1234-1234-12345678/resourceGroups/foo-bar/providers/Microsoft.Network/virtualNetworks/foo-var-vnet`
+5. Paste the `id` into the `Remote Virtual Network ID` field in the bundle and deploy
+6. Navigate to the Virtual Network Peerings page.
+7. Click on the peering connection.
+8. Click `Resync` and `Save`.
+
+### FAQ
+
+#### Can my address spaces overlap?
+No, they cannot overlap. By default, the Azure Virtual Network bundle uses our Auto-CIDR feature to provision your VNet and using an address space that does not overlap with any other address space for any other VNet in the same subscription. If you are using a custom CIDR, you will need to ensure that the address spaces do not overlap.
+
+If you are peering your VNet to a VNet that is not managed by Massdriver, you'll need to ensure that the address space for each VNet does not overlap.
+
+#### I'm trying to peer VNets across subscriptions, but I'm getting an error.
+If you are peering VNets across subscriptions, you'll need to ensure that [Microsoft Entra B2B collaboration](https://learn.microsoft.com/en-us/azure/active-directory/external-identities/add-users-administrator?toc=/azure/virtual-network/toc.json#add-guest-users-to-the-directory) is configured.
+
 ### Runbook
 
 #### Troubleshooting VNet Peering Status
