@@ -1,35 +1,38 @@
 schema: draft-07
-name: "azure-virtual-network-peering-connection"
-description: "Virtual network peering enables you to seamlessly connect two or more Virtual Networks in Azure. The virtual networks appear as one for connectivity purposes. The traffic between virtual machines in peered virtual networks uses the Microsoft backbone infrastructure. Like traffic between virtual machines in the same network, traffic is routed through Microsoft's private network only."
-source_url: github.com/massdriver-cloud/azure-virtual-network-peering-connection
-access: private
-type: infrastructure
-
+name: azure-virtual-network-peering-connection
+version: 1.0.0
+description: Virtual network peering enables you to seamlessly connect two or more Virtual Networks in Azure. The virtual networks appear as one for connectivity purposes. The traffic between virtual machines in peered virtual networks uses the Microsoft backbone infrastructure. Like traffic between virtual machines in the same network, traffic is routed through Microsoft's private network only.
+source_url: https://github.com/massdriver-cloud/azure-virtual-network-peering-connection
+type: application
 params:
   properties:
     accepter_vnet_id:
       type: string
       title: Remote VNet Resource ID
-      description: "**IMPORTANT: Only set this value if you haven't connected a remote \"accepter\" VNet to the bundle**.\n If an accepter VNet is connected, this field is ignored and the value will be extracted from the connection. Use this field if the remote VNet isn't managed by Massdriver or exists in a different subscription than the requester VNet. The CIDRs of the requester and accepter VNets **must not overlap**. **This will require you to resync the peering connection of the accepter VNet manually (instructions in bundle Guide)**!"
-      $md.immutable: true
-      $ref: https://raw.githubusercontent.com/massdriver-cloud/artifact-definitions/main/definitions/types/azure-resource-id.json
-
+      description: |-
+        **IMPORTANT: Only set this value if you haven't connected a remote "accepter" VNet to the bundle**.
+         If an accepter VNet is connected, this field is ignored and the value will be extracted from the connection. Use this field if the remote VNet isn't managed by Massdriver or exists in a different subscription than the requester VNet. The CIDRs of the requester and accepter VNets **must not overlap**. **This will require you to resync the peering connection of the accepter VNet manually (instructions in bundle Guide)**!
+      "$md.immutable": true
+      "$ref": https://raw.githubusercontent.com/massdriver-cloud/artifact-definitions/main/definitions/types/azure-resource-id.json
 connections:
   required:
   - azure_service_principal
   - requester
   properties:
     azure_service_principal:
-      $ref: massdriver/azure-service-principal
+      "$ref": massdriver/azure-service-principal
     requester:
-      $ref: massdriver/azure-virtual-network
+      "$ref": massdriver/azure-virtual-network
     accepter:
-      $ref: massdriver/azure-virtual-network
-
-
+      "$ref": massdriver/azure-virtual-network
 artifacts:
   properties: {}
-
 ui:
   ui:order:
-    - "*"
+  - "*"
+steps:
+- path: src
+  provisioner: opentofu
+  config:
+    checkov:
+      enable: true
