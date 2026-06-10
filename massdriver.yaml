@@ -15,15 +15,15 @@ params:
       "$ref": https://raw.githubusercontent.com/massdriver-cloud/artifact-definitions/main/definitions/types/azure-resource-id.json
 connections:
   required:
-  - azure_service_principal
+  - azure_authentication
   - requester
   properties:
-    azure_service_principal:
-      "$ref": massdriver/azure-service-principal
+    azure_authentication:
+      "$ref": azure-service-principal
     requester:
-      "$ref": massdriver/azure-virtual-network
+      "$ref": azure-virtual-network
     accepter:
-      "$ref": massdriver/azure-virtual-network
+      "$ref": azure-virtual-network
 artifacts:
   properties: {}
 ui:
