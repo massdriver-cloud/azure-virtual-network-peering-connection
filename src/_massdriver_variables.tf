@@ -3,12 +3,10 @@
 // To opt a variable out of regeneration, move it to another file (e.g. variables.tf).
 variable "accepter" {
   type = object({
-    data = object({
-      infrastructure = object({
-        cidr              = string
-        default_subnet_id = string
-        id                = string
-      })
+    infrastructure = object({
+      cidr              = string
+      default_subnet_id = string
+      id                = string
     })
     specs = optional(object({
       azure = optional(object({
@@ -53,12 +51,10 @@ variable "md_metadata" {
 }
 variable "requester" {
   type = object({
-    data = object({
-      infrastructure = object({
-        cidr              = string
-        default_subnet_id = string
-        id                = string
-      })
+    infrastructure = object({
+      cidr              = string
+      default_subnet_id = string
+      id                = string
     })
     specs = optional(object({
       azure = optional(object({

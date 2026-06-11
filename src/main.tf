@@ -1,11 +1,11 @@
 locals {
   create_accepter = var.accepter != null
 
-  requester_vnet_id   = var.requester.data.infrastructure.id
+  requester_vnet_id   = var.requester.infrastructure.id
   requester_vnet_name = element(split("/", local.requester_vnet_id), index(split("/", local.requester_vnet_id), "virtualNetworks") + 1)
   requester_vnet_rg   = element(split("/", local.requester_vnet_id), index(split("/", local.requester_vnet_id), "resourceGroups") + 1)
 
-  accepter_vnet_id   = try(var.accepter.data.infrastructure.id, var.accepter_vnet_id)
+  accepter_vnet_id   = try(var.accepter.infrastructure.id, var.accepter_vnet_id)
   accepter_vnet_name = element(split("/", local.accepter_vnet_id), index(split("/", local.accepter_vnet_id), "virtualNetworks") + 1)
   accepter_vnet_rg   = element(split("/", local.accepter_vnet_id), index(split("/", local.accepter_vnet_id), "resourceGroups") + 1)
 }
